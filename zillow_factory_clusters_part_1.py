@@ -159,6 +159,26 @@ def get_distances(tx_zillow, tx_Amzn, tesla_sc):
 
     return tgf_dist_from_zillow, sc_dist_from_zillow, fc_dist_from_zillow
 
+def normalize_dates(date, start_date, scaling_factor):
+    """
+    Normalize date data based on a specific start date.
+
+    Args:
+    dates (list): A list of date strings in the format 'YYYY-MM-DD'.
+    start_date (str): The reference start date string in the format 'YYYY-MM-DD'.
+    scaling_factor (int): The number of days to normalize the range of values.
+
+    Returns:
+    list: A list of normalized date values.
+    """
+
+    # for date in dates:
+    date_dt = datetime.strptime(date, '%Y-%m-%d').date()
+    days_diff = (date_dt - start_date).days
+    normalized_date = days_diff / scaling_factor
+
+    return normalized_date
+
 def KMeans(x, K=10, Niter=10, verbose=True):
     """Implements Lloyd's algorithm for the Euclidean metric."""
 
@@ -361,8 +381,8 @@ if __name__ == '__main__':
     plt.xlabel('Distance to TGF')
     plt.ylabel('Year Built')
     plt.legend()
-    plt.title('KMeans Clustering test (# clusters = ' + str(n_clusters) + ')' + ' (# of DPs = ' + str(target_length) + ')')
-    plt.savefig('KMeans Clustering test (# clusters = ' + str(n_clusters) + ')' + ' (# of DPs = ' + str(target_length) + ')')
+    plt.title('KMeans Clustering test (# clusters = {}, min_samples = {})'.format(n_clusters, target_length))
+    plt.savefig('KMeans Clustering test (# clusters = {}, min_samples = {}).png'.format(n_clusters, target_length))
     plt.show()
     plt.close()
 
@@ -379,8 +399,8 @@ if __name__ == '__main__':
     plt.xlabel('Distance to TGF')
     plt.ylabel('Price')
     plt.legend()
-    plt.title('KMeans Clustering test (# clusters = ' + str(n_clusters) + ')' + ' (# of DPs = ' + str(target_length) + ')')
-    plt.savefig('tgf_latest_saledate_KMeans Clustering test (# clusters = ' + str(n_clusters) + ')' + ' (# of DPs = ' + str(target_length) + ')')
+    plt.title('KMeans Clustering test (# clusters = {}, # of DPs = {})'.format(n_clusters, target_length))
+    plt.savefig('tgf_latest_saledate_KMeans Clustering test (# clusters = {}, # of DPs = {}).png'.format(n_clusters, target_length))
     plt.show()
     plt.close()
 
@@ -404,8 +424,8 @@ if __name__ == '__main__':
 
     ax.view_init(30, 45)  # You can adjust these values to change the viewing angle
 
-    plt.title('KMeans Clustering 3D test (n_clusters = {})'.format(n_clusters))
-    plt.savefig('KMeans Clustering 3D test (n_clusters = {})'.format(n_clusters))
+    plt.title('KMeans Clustering 3D test (# clusters = {}, (# of DPs = {})'.format(n_clusters, target_length))
+    plt.savefig('tgf_bedrooms_price_KMeans Clustering 3D test (n_clusters = {})'.format(n_clusters, target_length))
     plt.show()
     plt.close()
 
