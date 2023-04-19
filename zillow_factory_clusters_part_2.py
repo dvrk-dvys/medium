@@ -121,6 +121,26 @@ def get_distances(tx_zillow, tx_Amzn, tesla_sc):
 
     return tgf_dist_from_zillow, sc_dist_from_zillow, fc_dist_from_zillow
 
+def normalize_dates(date, start_date, scaling_factor):
+    """
+    Normalize date data based on a specific start date.
+
+    Args:
+    dates (list): A list of date strings in the format 'YYYY-MM-DD'.
+    start_date (str): The reference start date string in the format 'YYYY-MM-DD'.
+    scaling_factor (int): The number of days to normalize the range of values.
+
+    Returns:
+    list: A list of normalized date values.
+    """
+
+    # for date in dates:
+    date_dt = datetime.strptime(date, '%Y-%m-%d').date()
+    days_diff = (date_dt - start_date).days
+    normalized_date = days_diff / scaling_factor
+
+    return normalized_date
+
 def min_max_scaling(data):
     min_value = min(data)
     max_value = max(data)
@@ -383,7 +403,9 @@ if __name__ == '__main__':
     # Load housing data
     data = {"tgf": [], "sc": [], "fc": [], "bathrooms": [], "bedrooms": [], "price": [], "sqft": [], "avgSchoolRating": [], "latest_saledate": [], "year_built": []}
 
-    atx_gf_date = date(2020, 7, 22)
+    # atx_gf_date = date(2020, 7, 22)
+    atx_gf_date = datetime.strptime('2020-07-22', '%Y-%m-%d').date()
+    scaling_factor = 30
 
     for zj in TX_ZILLOW:
         data["bedrooms"].append(int(zj[44]))
@@ -392,15 +414,13 @@ if __name__ == '__main__':
         data["sqft"].append(float(zj[34]))
         data["avgSchoolRating"].append(float(zj[40]))
 
-        date_object = (datetime.strptime(zj[20], '%Y-%m-%d').date() - atx_gf_date).days
+        date_object = normalize_dates(zj[20], atx_gf_date, scaling_factor)
         data["latest_saledate"].append(date_object)
-        year_object = (datetime.strptime(zj[17], '%Y').date() - atx_gf_date).days
+        year_built_date = datetime.strptime(zj[17], '%Y').date()
+        year_object = normalize_dates(str(year_built_date), atx_gf_date, scaling_factor)
         data["year_built"].append(year_object)
 
     # json_converter.flatten_list(
-    data["tgf"] = tgf_dist_from_z
-    data["sc"] = sc_dist_from_z
-    data["fc"] = fc_dist_from_z
     data["tgf"] = tgf_dist_from_z
     data["sc"] = sc_dist_from_z
     data["fc"] = fc_dist_from_z
@@ -418,8 +438,6 @@ if __name__ == '__main__':
 
     ## Load feature stack tensors
     features = torch.stack([tgf, sc, fc, bathrooms, bedrooms, price, sqft, avgSchoolRating, latest_saledate, year_built], dim=1)
-
-
 
     ###### normalized way
     ###### normalized way
