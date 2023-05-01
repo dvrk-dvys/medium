@@ -12,6 +12,8 @@ from geopy.distance import geodesic
 import requests
 from tqdm import tqdm
 
+import random
+
 
 
 def search_zillow_api(location):
@@ -291,21 +293,27 @@ def KMeans(x, K=10, Niter=10, verbose=True):
 
     return cl, c
 
+def reduce_list_length(dictionary, target_length):
+    reduced_dict = {}
+    for key, value in dictionary.items():
+        reduced_dict[key] = random.sample(value, target_length)
+    return reduced_dict
+
 if __name__ == '__main__':
 
     # Opening JSON file
     # _TX_ZILLOW = "/Users/jordanharris/Code/PycharmProjects/adsense/real_estate_loader/training_data/zillow_texas_json/filtered01.json"
 
-    _TX_ZILLOW = '/Users/jordanharris/Code/PycharmProjects/adsense/real_estate_loader/atx_house_listings/austinHousingData.csv'
-    _TX_AMZN = "/Users/jordanharris/Code/PycharmProjects/adsense/real_estate_loader/training_data/TX_AMZN_Warehouses.csv"
-    _TESLA_SC = "/Users/jordanharris/Code/PycharmProjects/adsense/real_estate_loader/training_data/texas_tesla_superchargers.csv"
-    _SC_GEO_LOC = "/Users/jordanharris/Code/PycharmProjects/adsense/real_estate_loader/training_data/geo_dict_sc.json"
-    _FC_GEO_LOC = "/Users/jordanharris/Code/PycharmProjects/adsense/real_estate_loader/training_data/geo_dict_fc.json"
+    # _TX_ZILLOW = '/Users/jordanharris/Code/PycharmProjects/adsense/real_estate_loader/atx_house_listings/austinHousingData.csv'
+    # _TX_AMZN = "/Users/jordanharris/Code/PycharmProjects/adsense/real_estate_loader/training_data/TX_AMZN_Warehouses.csv"
+    # _TESLA_SC = "/Users/jordanharris/Code/PycharmProjects/adsense/real_estate_loader/training_data/texas_tesla_superchargers.csv"
+    # _SC_GEO_LOC = "/Users/jordanharris/Code/PycharmProjects/adsense/real_estate_loader/training_data/geo_dict_sc.json"
+    # _FC_GEO_LOC = "/Users/jordanharris/Code/PycharmProjects/adsense/real_estate_loader/training_data/geo_dict_fc.json"
     #
-    # _TX_ZILLOW = "/Users/joergbln/Desktop/JAH/Code/in_Data/atx_zillow/austinHousingData.csv"
-    # _TX_AMZN = "/Users/joergbln/Desktop/JAH/Code/in_Data/self_made/amazon_fullfillment_centers.csv"
-    # _TESLA_SC = "/Users/joergbln/Desktop/JAH/Code/in_Data/self_made/texas_tesla_superchargers.csv"
-    # _FC_GEO_LOC = "/Users/joergbln/Desktop/JAH/Code/in_Data/self_made/fc_geo_dict.json"
+    _TX_ZILLOW = "/Users/joergbln/Desktop/JAH/Code/real_estate_loader/in_Data/atx_zillow/austinHousingData.csv"
+    _TX_AMZN = "/Users/joergbln/Desktop/JAH/Code/real_estate_loader/in_Data/self_made/amazon_fullfillment_centers.csv"
+    _TESLA_SC = "/Users/joergbln/Desktop/JAH/Code/real_estate_loader/in_Data/self_made/texas_tesla_superchargers.csv"
+    _FC_GEO_LOC = "/Users/joergbln/Desktop/JAH/Code/real_estate_loader/in_Data/self_made/fc_geo_dict.json"
 
     TX_ZILLOW = []
     with open(_TX_ZILLOW) as file:
@@ -378,15 +386,13 @@ if __name__ == '__main__':
     #out_file.close()
     # ///// Google Maps API ##############################
 
-    # _tgf_dist_from_z = '/Users/joergbln/Desktop/JAH/Code/in_Data/self_made/tx_tgf_dist_from_zillow.json'
-    # _fc_dist_from_z = '/Users/joergbln/Desktop/JAH/Code/in_Data/self_made/tx_fc_dist_from_zillow.json'
-    # _sc_dist_from_z = '/Users/joergbln/Desktop/JAH/Code/in_Data/self_made/tx_sc_dist_from_zillow.json'
+    _tgf_dist_from_z = '/Users/joergbln/Desktop/JAH/Code/real_estate_loader/in_Data/self_made/tx_tgf_dist_from_zillow.json'
+    _fc_dist_from_z = '/Users/joergbln/Desktop/JAH/Code/real_estate_loader/in_Data/self_made/tx_fc_dist_from_zillow.json'
+    _sc_dist_from_z = '/Users/joergbln/Desktop/JAH/Code/real_estate_loader/in_Data/self_made/tx_sc_dist_from_zillow.json'
 
-    _tgf_dist_from_z = '/Users/jordanharris/Code/PycharmProjects/adsense/real_estate_loader/tx_tgf_dist_from_zillow_big.json'
-    _fc_dist_from_z = '/Users/jordanharris/Code/PycharmProjects/adsense/real_estate_loader/tx_fc_dist_from_zillow_big.json'
-    _sc_dist_from_z = '/Users/jordanharris/Code/PycharmProjects/adsense/real_estate_loader/tx_sc_dist_from_zillow_big.json'
-
-
+    # _tgf_dist_from_z = '/Users/jordanharris/Code/PycharmProjects/adsense/real_estate_loader/tx_tgf_dist_from_zillow_big.json'
+    # _fc_dist_from_z = '/Users/jordanharris/Code/PycharmProjects/adsense/real_estate_loader/tx_fc_dist_from_zillow_big.json'
+    # _sc_dist_from_z = '/Users/jordanharris/Code/PycharmProjects/adsense/real_estate_loader/tx_sc_dist_from_zillow_big.json'
 
     tgf_f = open(_tgf_dist_from_z)
     tgf_dist_from_z = json.load(tgf_f)
@@ -424,6 +430,13 @@ if __name__ == '__main__':
     data["tgf"] = tgf_dist_from_z
     data["sc"] = sc_dist_from_z
     data["fc"] = fc_dist_from_z
+
+    # Calculate the target length
+    length = len(data["tgf"])
+    target_length = 3000
+
+    # Reduce the length of the lists
+    data = reduce_list_length(data, target_length)
 
     tgf = torch.tensor(data['tgf'], dtype=torch.float32)
     sc = torch.tensor(data['sc'], dtype=torch.float32)
@@ -471,15 +484,15 @@ if __name__ == '__main__':
     for i, cluster in enumerate(clusters):
         if len(cluster) > 0:
             cluster = np.stack(cluster)
-            plt.scatter(cluster[:, 0], cluster[:, 9], color=colors[i % len(colors)], label=f'Cluster {i}')
+            plt.scatter(cluster[:, 0], cluster[:, 1], color=colors[i % len(colors)], label=f'Cluster {i}')
 
     # Plot the cluster centers
-    plt.scatter(c[:, 0], c[:, 9], color='black', marker='x', s=200, linewidths=3, label='Cluster centers')
+    plt.scatter(c[:, 0], c[:, 1], color='black', marker='x', s=200, linewidths=3, label='Cluster centers')
 
-    plt.xlabel('Distance to TGF')
-    plt.ylabel('Year Built')
+    plt.xlabel('Normed X')
+    plt.ylabel('Normed Y')
     plt.legend()
-    plt.title('KMeans Clustering test (# clusters = {}, (# of DPs = {})'.format(n_clusters, target_length))
-    plt.savefig('tgf_bedrooms_price_KMeans Clustering test (n_clusters = {})'.format(n_clusters, target_length))
+    plt.title('Normed KMeans Clustering test (# clusters = {}, (# of DPs = {})'.format(n_clusters, target_length))
+    plt.savefig('normed_KMeans Clustering test (n_clusters = {})'.format(n_clusters, target_length))
     plt.show()
     plt.close()
