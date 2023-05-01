@@ -489,8 +489,8 @@ if __name__ == '__main__':
     # Plot the cluster centers
     plt.scatter(c[:, 0], c[:, 1], color='black', marker='x', s=200, linewidths=3, label='Cluster centers')
 
-    plt.xlabel('Normed X')
-    plt.ylabel('Normed Y')
+    plt.xlabel('Principle Component 1')
+    plt.ylabel('Principle Component 2')
     plt.legend()
     plt.title('Normed KMeans Clustering test (# clusters = {}, (# of DPs = {})'.format(n_clusters, target_length))
     plt.savefig('normed_KMeans Clustering test (n_clusters = {})'.format(n_clusters, target_length))
