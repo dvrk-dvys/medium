@@ -438,19 +438,19 @@ if __name__ == '__main__':
     # Reduce the length of the lists
     data = reduce_list_length(data, target_length)
 
-    tgf = torch.tensor(data['tgf'], dtype=torch.float32)
-    sc = torch.tensor(data['sc'], dtype=torch.float32)
-    fc = torch.tensor(data['fc'], dtype=torch.float32)
-    bathrooms = torch.tensor(data['bathrooms'], dtype=torch.float32)
-    bedrooms = torch.tensor(data['bedrooms'], dtype=torch.float32)
-    price = torch.tensor(data['price'], dtype=torch.float32)
-    sqft = torch.tensor(data['sqft'], dtype=torch.float32)
-    avgSchoolRating = torch.tensor(data['avgSchoolRating'], dtype=torch.float32)
-    latest_saledate = torch.tensor(data['latest_saledate'], dtype=torch.float32)
-    year_built = torch.tensor(data['year_built'], dtype=torch.float32)
+#     tgf = torch.tensor(data['tgf'], dtype=torch.float32)
+#     sc = torch.tensor(data['sc'], dtype=torch.float32)
+#     fc = torch.tensor(data['fc'], dtype=torch.float32)
+#     bathrooms = torch.tensor(data['bathrooms'], dtype=torch.float32)
+#     bedrooms = torch.tensor(data['bedrooms'], dtype=torch.float32)
+#     price = torch.tensor(data['price'], dtype=torch.float32)
+#     sqft = torch.tensor(data['sqft'], dtype=torch.float32)
+#     avgSchoolRating = torch.tensor(data['avgSchoolRating'], dtype=torch.float32)
+#     latest_saledate = torch.tensor(data['latest_saledate'], dtype=torch.float32)
+#     year_built = torch.tensor(data['year_built'], dtype=torch.float32)
 
-    ## Load feature stack tensors
-    features = torch.stack([tgf, sc, fc, bathrooms, bedrooms, price, sqft, avgSchoolRating, latest_saledate, year_built], dim=1)
+#     ## Load feature stack tensors
+#     features = torch.stack([tgf, sc, fc, bathrooms, bedrooms, price, sqft, avgSchoolRating, latest_saledate, year_built], dim=1)
 
     ###### normalized way
     ###### normalized way
